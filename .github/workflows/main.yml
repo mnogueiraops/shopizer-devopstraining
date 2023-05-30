@@ -32,7 +32,7 @@ jobs:
     - name: Clone repository and deploy on Ubuntu-ARM
     
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         sudo apt update -y
         sudo apt install -y maven
         sudo apt install -y openjdk-11-jdk
