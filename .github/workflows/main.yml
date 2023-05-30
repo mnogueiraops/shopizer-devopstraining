@@ -24,12 +24,20 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
     - name: Clone repository and deploy on Ubuntu-ARM
     
-      run: ssh -tt -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}       
-      run: git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
-      run: cd shopizer-devopstraining
-      run: mvnw clean install
-      run: cd sm-shop
-      run: mvnw spring-boot:run
+      run: |
+        ssh -tt -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        sudo apt install -y git
+        sudo apt install -y openjdk-11-jdk
+        cat /etc/os-release
+        git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
+        cd shopizer-devopstraining
+        mvnw clean install
+        cd sm-shop
+        mvnw spring-boot:run
