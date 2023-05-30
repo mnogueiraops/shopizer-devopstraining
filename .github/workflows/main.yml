@@ -22,7 +22,7 @@ jobs:
       run: mvnw -B package --file pom.xml
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
@@ -30,11 +30,12 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
     - name: Clone repository and deploy on Ubuntu-ARM
-    runs-on: self-hosted
+    
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         sudo apt update -y
-        sudo apt install maven
+        sudo apt install -y maven
+        sudo apt install -y openjdk-11-jdk
         git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
         cd shopizer-devopstraining
         mvnw clean install
