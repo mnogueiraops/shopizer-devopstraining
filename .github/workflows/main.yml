@@ -1,0 +1,53 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvnw -B package --file pom.xml
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: {%- raw -%} ${{ secrets.SSH_KEY }}
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+      with: 
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+- name: Deploy on Ubuntu-ARM
+  run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} && git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
+  run: cd shopizer-devopstraining
+  run: mvnw clean install
+  run: cd sm-shop
+  run: mvnw spring-boot:run
