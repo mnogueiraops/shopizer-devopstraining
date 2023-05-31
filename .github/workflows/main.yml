@@ -1,11 +1,7 @@
 name: CI with Maven
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+on: workflow_dispatch
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,14 +19,14 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
+      - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v0.1.10
       with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
-        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-    - name: Clone repository and deploy on Ubuntu-ARM
-    
-      run: |
+        port: 22
+        script: |
         ssh -tt -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         sudo apt install -y git
         sudo apt install -y openjdk-11-jdk
