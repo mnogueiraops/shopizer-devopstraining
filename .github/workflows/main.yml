@@ -33,6 +33,6 @@ jobs:
           cat /etc/os-release
           git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
           cd shopizer-devopstraining
-          mvnw clean install
+          mvn clean install
           cd sm-shop
-          mvnw spring-boot:run
+          mvn spring-boot:run
