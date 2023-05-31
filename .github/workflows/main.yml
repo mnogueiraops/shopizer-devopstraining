@@ -28,12 +28,12 @@ jobs:
          key: ${{ secrets.SSH_KEY }}
          port: 22
          script: |
-         ssh -tt -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-         sudo apt install -y git
-         sudo apt install -y openjdk-11-jdk
-         cat /etc/os-release
-         git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
-         cd shopizer-devopstraining
-         mvnw clean install
-         cd sm-shop
-         mvnw spring-boot:run
+          ssh -tt -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          sudo apt install -y git
+          sudo apt install -y openjdk-11-jdk
+          cat /etc/os-release
+          git clone https://github.com/mnogueiraops/shopizer-devopstraining.git
+          cd shopizer-devopstraining
+          mvnw clean install
+          cd sm-shop
+          mvnw spring-boot:run
